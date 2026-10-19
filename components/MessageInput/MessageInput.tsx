@@ -1,0 +1,79 @@
+import { useState } from "react";
+import { SendHorizontal } from "lucide-react";
+import { useAuth } from "@/store/AuthStore";
+import { useChatStore } from "@/store/ChatStore";
+import { messageInterface, SendType } from "@/Types/ContactsType";
+import { saveMessage } from "@/lib/db/messageRepo";
+import { sendMessage } from "@/socket/emitters";
+
+function MessageInput() {
+  const selectedContact = useChatStore((state) => state.selectedContact);
+  const pushMessage = useChatStore((state) => state.pushMessage);
+  const currentUser = useAuth((state) => state.user);
+
+  const [message, setMessage] = useState("");
+
+  const generateId = () => {
+    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  };
+
+  const handleSend = async () => {
+    if (!message.trim() || !selectedContact) return;
+    const id = generateId();
+
+    const newMsg: messageInterface = {
+      id,
+      senderid: currentUser?._id,
+      receiverid: selectedContact?._id,
+      partnerid: selectedContact?._id,
+      intent: SendType.SENT,
+      message: message,
+    };
+    sendMessage({ receiverid: selectedContact._id, message });
+
+    // socketRef.emit("message:send", {
+    //   senderid: currentUser?._id,
+    //   receiverid: selectedContact?._id,
+    //   message,
+    // });
+    pushMessage(newMsg, currentUser?._id);
+    await saveMessage(newMsg);
+    setMessage("");
+  };
+
+  return (
+    <>
+      <div className="h-full relative flex flex-col items-center justify-center">
+        <div className="w-full lg:w-[80%] lg:px-8 bg-neutral-950 rounded-2xl py-1">
+          <div className="w-full flex items-center gap-2 p-2 h-full">
+            <div className="flex-1 flex items-center rounded-xl h-full">
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                placeholder="Write a message..."
+                className="flex-1 text-white placeholder:text-neutral-400 focus:outline-none text-sm h-full bg-transparent"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={handleSend}
+              disabled={!message.trim()}
+              className="shrink-0 w-10 h-10 flex items-center justify-center bg-green-600 hover:bg-green-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 cursor-pointer"
+            >
+              <SendHorizontal className="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </div>
+        <div>
+          <h1 className="text-center text-neutral-400 text-xs mt-1 font-light">
+            SendMe: A Messging Platform
+          </h1>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default MessageInput;
