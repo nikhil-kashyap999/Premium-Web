@@ -26,7 +26,7 @@ function LoadingPage() {
             width={64}
             height={64}
             priority
-            className="opacity-90 w-16 h-auto"
+            className="opacity-90"
           />
           <h1 className="text-neutral-400 text-sm font-medium tracking-wide">
             {APP_NAME}

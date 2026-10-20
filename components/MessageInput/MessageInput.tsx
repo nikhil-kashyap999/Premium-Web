@@ -31,11 +31,6 @@ function MessageInput() {
     };
     sendMessage({ receiverid: selectedContact._id, message });
 
-    // socketRef.emit("message:send", {
-    //   senderid: currentUser?._id,
-    //   receiverid: selectedContact?._id,
-    //   message,
-    // });
     pushMessage(newMsg, currentUser?._id);
     await saveMessage(newMsg);
     setMessage("");
@@ -44,7 +39,7 @@ function MessageInput() {
   return (
     <>
       <div className="h-full relative flex flex-col items-center justify-center">
-        <div className="w-full lg:w-[80%] lg:px-8 bg-neutral-950 rounded-2xl py-1">
+        <div className="w-full lg:w-[80%] lg:px-8 bg-black/60 rounded-2xl py-1 border border-neutral-800">
           <div className="w-full flex items-center gap-2 p-2 h-full">
             <div className="flex-1 flex items-center rounded-xl h-full">
               <input
@@ -60,7 +55,7 @@ function MessageInput() {
               type="button"
               onClick={handleSend}
               disabled={!message.trim()}
-              className="shrink-0 w-10 h-10 flex items-center justify-center bg-green-600 hover:bg-green-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 cursor-pointer"
+              className="shrink-0 w-10 h-10 flex items-center justify-center bg-black/80 hover:bg-green-500 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 cursor-pointer"
             >
               <SendHorizontal className="w-5 h-5 text-white" />
             </button>

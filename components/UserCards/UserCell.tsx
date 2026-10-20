@@ -1,18 +1,11 @@
 import Image from "next/image";
 import { contactType } from "../../Types/ContactsType";
 import { useChatStore } from "@/store/ChatStore";
-import { useEffect } from "react";
-import { useNotification } from "@/context/NotificationContext";
+import { EllipsisVerticalIcon } from "lucide-react";
 
 function UserCell({ user, onClick }: { user: contactType; onClick?: any }) {
-  const { chat } = useNotification();
-  const { getLastMessageForContact, selectedContact } = useChatStore();
+  const { getLastMessageForContact } = useChatStore();
   const lastMessage = getLastMessageForContact(user._id);
-
-  // useEffect(() => {
-  //   if (!selectedContact || selectedContact._id != user._id)
-  //     chat(`New Message from ${user.username}`);
-  // }, [lastMessage]);
 
   return (
     <div
@@ -20,16 +13,17 @@ function UserCell({ user, onClick }: { user: contactType; onClick?: any }) {
       onClick={onClick}
     >
       {/* Avatar */}
-      <div className="w-10 h-10 shrink-0 rounded-full bg-green-950 mr-2">
-        {user.avatarUrl && (
-          <Image
-            src={user?.avatarUrl}
-            alt="avatar"
-            className="w-full h-full"
-            width={20}
-            height={10}
-          />
-        )}
+      <div className="w-10 h-10 shrink-0 rounded-full mr-2 bg-green-950 relative">
+        <Image
+          src={user?.avatarUrl ?? "/images/default-avatar.png"}
+          alt="avatar"
+          className="w-full h-full"
+          width={20}
+          height={10}
+        />
+        <div
+          className={`w-2 h-2 ${user?.isActive ? "bg-sky-600" : "bg-neutral-500"} absolute rounded-full bottom-1 -right-0.5`}
+        />
       </div>
 
       {/* Text */}
@@ -39,13 +33,9 @@ function UserCell({ user, onClick }: { user: contactType; onClick?: any }) {
           {lastMessage?.message ?? "Recent Messages will appear here"}
         </p>
       </div>
-
-      {/* Online indicator */}
-      <div className="shrink-0 flex items-start self-start p-1 mt-1 ml-1">
-        <div
-          className={`w-2 h-2 rounded-full ${user.isActive ? "bg-green-600" : "bg-transparent"}`}
-        />
-      </div>
+      <button className="h-full p-2" onClick={() => alert("msg")}>
+        <EllipsisVerticalIcon size={20} color="white" />
+      </button>
     </div>
   );
 }

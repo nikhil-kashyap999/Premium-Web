@@ -1,0 +1,191 @@
+.root {
+    position: relative;
+    display: inline-block;
+    z-index: 30;
+    /* trigger + menu backdrop ke upar rahenge */
+}
+
+/* ---------- Blurred backdrop ---------- */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    /* root ke andar, trigger/menu ke neeche */
+    background: rgba(0, 0, 0, 0.25);
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.25s ease,
+        backdrop-filter 0.25s ease,
+        -webkit-backdrop-filter 0.25s ease,
+        visibility 0s linear 0.25s;
+    /* close animation ke baad hide */
+}
+
+.backdrop[data-open='true'] {
+    opacity: 1;
+    visibility: visible;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    transition:
+        opacity 0.25s ease,
+        backdrop-filter 0.25s ease,
+        -webkit-backdrop-filter 0.25s ease,
+        visibility 0s;
+}
+
+/* ---------- Trigger ---------- */
+.trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #111;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.trigger:hover {
+    background: #f6f6f6;
+}
+
+.trigger:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+}
+
+.chevron {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.chevron[data-open='true'] {
+    transform: rotate(180deg);
+}
+
+/* ---------- Menu panel ---------- */
+.menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 210px;
+    padding: 6px;
+    border-radius: 14px;
+    background-color: "#262626";
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.15),
+        0 2px 6px rgba(0, 0, 0, 0.08);
+
+    transform-origin: top right;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.95);
+    transition:
+        opacity 0.2s ease,
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s linear 0.25s;
+}
+
+.menu[data-open='true'] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    transition:
+        opacity 0.2s ease,
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        visibility 0s;
+}
+
+/* ---------- Items (stagger animation) ---------- */
+.item {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    text-align: left;
+    color: #1f2937;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+        background 0.15s ease,
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.menu[data-open='true'] .item {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: calc(var(--i) * 30ms + 40ms);
+}
+
+.item:hover,
+.item:focus-visible {
+    background: rgba(99, 102, 241, 0.12);
+    outline: none;
+    transition-delay: 0s;
+}
+
+.danger {
+    color: #dc2626;
+}
+
+.danger:hover,
+.danger:focus-visible {
+    background: rgba(220, 38, 38, 0.12);
+}
+
+/* ---------- Dark mode ---------- */
+@media (prefers-color-scheme: dark) {
+    .trigger {
+        color: #f3f4f6;
+        background: #1f2937;
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .trigger:hover {
+        background: #374151;
+    }
+
+    .menu {
+        background: rgba(23, 23, 23, 0.85);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .item {
+        color: #e5e7eb;
+    }
+
+    .danger {
+        color: #f87171;
+    }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+
+    .backdrop,
+    .menu,
+    .item,
+    .chevron {
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
+}
