@@ -11,11 +11,10 @@ export type DropdownItem = {
 };
 
 type DropdownProps = {
-  label: string;
   items: DropdownItem[];
 };
 
-export default function Dropdown({ label, items }: DropdownProps) {
+export default function Dropdown({ items }: DropdownProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);

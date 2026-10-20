@@ -4,9 +4,10 @@ import { useAuth } from "@/store/AuthStore";
 import { useChatStore } from "@/store/ChatStore";
 import { saveMessage } from "@/lib/db/messageRepo";
 import { useContacts } from "@/store/ContactsStore";
-import { IncomingMessageType } from "@/Types/BareMessageType";
+import { IncomingMessageType, Status } from "@/Types/BareMessageType";
 import { messageInterface, SendType } from "@/Types/ContactsType";
 import { useNotificationStore } from "@/store/NotificationStore";
+import { sendMessageStatus } from "./emitters";
 
 export function registerSocketListners(socket: Socket) {
   const onConnect = () => {
@@ -20,7 +21,7 @@ export function registerSocketListners(socket: Socket) {
     useContacts.getState().updateContactStatus(data);
   };
   const onNewMessage = async (data: IncomingMessageType) => {
-    const id = generateId();
+    const id = data.messageid ?? generateId();
     const partnerid =
       data.senderid === useAuth.getState().user?._id
         ? data.receiverid
@@ -30,6 +31,7 @@ export function registerSocketListners(socket: Socket) {
       id,
       partnerid,
       intent: SendType.RECEIVED,
+      status: "delivered",
     };
     if (data.senderid !== useChatStore.getState().selectedContact?._id) {
       const contact = useContacts.getState().getContact(data.senderid);
@@ -42,11 +44,15 @@ export function registerSocketListners(socket: Socket) {
       );
       await saveMessage(enrichedMsg);
     }
-
     useChatStore
       .getState()
       .pushMessage(enrichedMsg, useAuth.getState().user?._id);
     await saveMessage(enrichedMsg);
+    sendMessageStatus({
+      messageid: id,
+      receiverid: data.senderid,
+      status: "delivered",
+    });
   };
   const onInviteNotification = (data: {
     username: string;
@@ -60,12 +66,33 @@ export function registerSocketListners(socket: Socket) {
         "invite notification",
       );
   };
+  const onMessageAck = async (payload: {
+    messageid: string;
+    receiverid: string;
+  }) => {
+    useChatStore
+      .getState()
+      .updateMessageStatus(payload.messageid, payload.receiverid, "sent");
+  };
+  const onMessageStatus = async (payload: {
+    messageid: string;
+    senderid: string;
+    receiverid: string;
+    status: Status;
+  }) => {
+    useChatStore
+      .getState()
+      .updateMessageStatus(payload.messageid, payload.senderid, payload.status);
+  };
 
   socket.on("connect", onConnect);
   socket.on("disconnect", onDisconnect);
   socket.on(SERVER_EVENTS.MESSAGE_NEW, onNewMessage);
   socket.on(SERVER_EVENTS.PRESENCE_UPDATE, onPresence);
   socket.on(SERVER_EVENTS.INVITE_NOTIFICATION, onInviteNotification);
+  socket.on(SERVER_EVENTS.MESSAGE_ACK, onMessageAck);
+  socket.on(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
+
   socket.on("pong", () => console.log("pong event"));
   socket.on("connect_error", async (e) => {
     console.error(e);
@@ -77,6 +104,9 @@ export function registerSocketListners(socket: Socket) {
     socket.off(SERVER_EVENTS.MESSAGE_NEW, onNewMessage);
     socket.off(SERVER_EVENTS.PRESENCE_UPDATE, onPresence);
     socket.off(SERVER_EVENTS.INVITE_NOTIFICATION, onInviteNotification);
+    socket.off(SERVER_EVENTS.MESSAGE_ACK, onMessageAck);
+    socket.off(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
+
     socket.off("pong", () => console.log("pong event"));
     socket.off("connect_error", async (err) => {
       console.log(err);

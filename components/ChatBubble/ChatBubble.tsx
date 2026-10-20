@@ -1,6 +1,8 @@
 import useMessages from "@/hooks/useMessages";
 import { SendType } from "@/Types/ContactsType";
 import { useState, useEffect } from "react";
+import { Check, CheckCheck, Clock } from "lucide-react";
+import { Status } from "@/Types/BareMessageType";
 
 function OptionDialogue({
   visible,
@@ -90,15 +92,13 @@ function OptionDialogue({
   );
 }
 
-function ChatBubble({
-  id,
-  sended,
-  message,
-}: {
-  id?: string;
-  sended?: SendType;
-  message?: string;
-}) {
+type ChatBubbleProps = {
+  id: string;
+  sended: SendType; // true = mera message
+  message: string;
+  status?: Status;
+};
+function ChatBubble({ id, sended, message, status }: ChatBubbleProps) {
   const [openDialogue, setOpenDialogue] = useState(false);
   const [mounted, setMounted] = useState(false);
   const isSent = sended === SendType.SENT;
@@ -108,6 +108,21 @@ function ChatBubble({
     const t = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(t);
   }, []);
+
+  const MessageStatus = ({ status }: { status?: Status }) => {
+    switch (status) {
+      case "sending":
+        return <Clock size={14} className="text-gray-400" />;
+      case "sent":
+        return <Check size={14} className="text-gray-400" />;
+      case "delivered":
+        return <CheckCheck size={14} className="text-gray-400" />;
+      case "read":
+        return <CheckCheck size={14} className="text-sky-400" />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div
@@ -127,7 +142,7 @@ function ChatBubble({
         <div
           onDoubleClick={() => setOpenDialogue((v) => !v)}
           className={`
-             px-4 py-2.5 rounded-2xl text-sm leading-relaxed cursor-default
+             px-1 py-2 rounded-2xl text-sm leading-relaxed cursor-default
             select-none transition-transform duration-100
             active:scale-[0.97]
             ${
@@ -138,7 +153,12 @@ function ChatBubble({
             backdrop-blur-sm
           `}
         >
-          {message}
+          <p className="wrap-break-word whitespace-pre-wrap px-2">{message}</p>
+          {isSent && (
+            <span className="mb-0.5 shrink-0 w-full justify-end flex items-center px-2">
+              <MessageStatus status={status} />
+            </span>
+          )}
         </div>
       </div>
       {/* Option Dialogue */}

@@ -14,12 +14,13 @@ const EMPTY_MESSAGES: messageInterface[] = []; // stable reference (infinite-loo
 export default function useMessages() {
   const { user: currentUser } = useAuth();
   const selectedContact = useChatStore((state) => state.selectedContact);
-  const { deleteMsg, pushMessage, getMessagesForContact } = useChatStore();
+  const { deleteMsg, pushMessage } = useChatStore();
 
   // displayMessages — ab local state nahi, seedha store se derive
-  const displayMessages = useChatStore(
-    (state) =>
-      state.messagesByContactId[selectedContact?._id ?? ""] ?? EMPTY_MESSAGES,
+  const displayMessages = useChatStore((state) =>
+    selectedContact
+      ? state.messagesByContactId[selectedContact?._id ?? ""]
+      : EMPTY_MESSAGES,
   );
 
   const loadedContactsRef = useRef(new Set<string>());

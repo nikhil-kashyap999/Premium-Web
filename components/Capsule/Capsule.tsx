@@ -3,10 +3,11 @@
 import { useChatStore } from "@/store/ChatStore";
 import { useContacts } from "@/store/ContactsStore";
 import { AnimatePresence, motion } from "framer-motion";
-import { EllipsisVerticalIcon, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import Dropdown from "../DropDown/DropDown";
 import { useProfileModal } from "@/context/ProfileModalContext";
 import { useAuth } from "@/store/AuthStore";
+import { deleteMessage } from "@/lib/db/messageRepo";
 
 function Capsule({ setIsOpen }: any) {
   const onLogout = useAuth((s) => s.logout);
@@ -55,9 +56,12 @@ function Capsule({ setIsOpen }: any) {
         </AnimatePresence>
       </div>
       <Dropdown
-        label="Account"
         items={[
           { label: "Profile", onSelect: showProfileModal },
+          {
+            label: "Delete Chat",
+            onSelect: async () => contactid && deleteMessage(contactid._id),
+          },
           {
             label: "Logout",
             danger: true,

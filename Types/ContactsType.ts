@@ -1,15 +1,18 @@
+import { Status } from "./BareMessageType";
+
 export enum SendType {
   SENT = "sent",
   RECEIVED = "received",
 }
 
 export interface messageInterface {
-  id?: string;
+  id: string;
   senderid?: string;
   receiverid?: string;
   partnerid?: string;
   message: string;
-  intent?: SendType;
+  intent: SendType;
+  status: Status;
 }
 
 export type contactType = {

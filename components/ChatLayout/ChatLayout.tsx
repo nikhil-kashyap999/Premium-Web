@@ -11,12 +11,9 @@ import { RefreshCcw } from "lucide-react";
 import useFetchContacts from "@/hooks/useFetchContacts";
 import { contactType } from "../../Types/ContactsType";
 import ChatBanner from "./ChatBanner";
-// import { useSocket } from "@/hooks/useSocket";
 import { useChatStore } from "@/store/ChatStore";
 import { useContacts } from "@/store/ContactsStore";
 import NotificationCard from "../Notification/NotificationCard";
-import { useNotificationStore } from "@/store/NotificationStore";
-import Dropdown from "../DropDown/DropDown";
 
 type ChatContainerProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,7 +41,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
       style={{ backgroundColor: color.backgroundColor }}
       className=" w-[95vw] h-[90vh] lg:w-screen lg:h-screen rounded-2xl lg:grid lg:grid-cols-[400px_1fr]"
     >
-  
+
       <NotificationCard />
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col h-full min-h-0 px-3 border-r border-neutral-500/50">

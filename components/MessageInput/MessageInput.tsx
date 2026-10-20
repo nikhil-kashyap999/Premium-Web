@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { SendHorizontal } from "lucide-react";
 import { useAuth } from "@/store/AuthStore";
-import { useChatStore } from "@/store/ChatStore";
-import { messageInterface, SendType } from "@/Types/ContactsType";
-import { saveMessage } from "@/lib/db/messageRepo";
+import { SendHorizontal } from "lucide-react";
 import { sendMessage } from "@/socket/emitters";
+import { useChatStore } from "@/store/ChatStore";
+import { saveMessage } from "@/lib/db/messageRepo";
+import { messageInterface, SendType } from "@/Types/ContactsType";
 
 function MessageInput() {
   const selectedContact = useChatStore((state) => state.selectedContact);
@@ -28,9 +28,9 @@ function MessageInput() {
       partnerid: selectedContact?._id,
       intent: SendType.SENT,
       message: message,
+      status: "sending",
     };
-    sendMessage({ receiverid: selectedContact._id, message });
-
+    sendMessage({ receiverid: selectedContact._id, message, messageid: id });
     pushMessage(newMsg, currentUser?._id);
     await saveMessage(newMsg);
     setMessage("");

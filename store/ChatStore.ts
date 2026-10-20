@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { Status } from "@/Types/BareMessageType";
 import { contactType, messageInterface } from "@/Types/ContactsType";
 
 interface chatStoreInterface {
@@ -17,6 +18,11 @@ interface chatStoreInterface {
     contactId: string,
   ) => messageInterface | null | void;
   getAllMessages: () => any;
+  updateMessageStatus: (
+    msgid: string,
+    contactid: string,
+    status: Status,
+  ) => void;
 }
 
 export const useChatStore = create<chatStoreInterface>((set, get) => ({
@@ -83,4 +89,19 @@ export const useChatStore = create<chatStoreInterface>((set, get) => ({
     }
   },
   getAllMessages: () => get().messagesByContactId,
+
+  updateMessageStatus: (msgid, contactid, status) => {
+    set((s) => {
+      const messages = get().messagesByContactId[contactid];
+      if (!messages) return s;
+      return {
+        messagesByContactId: {
+          ...s.messagesByContactId,
+          [contactid]: messages.map((m) =>
+            m.id === msgid ? { ...m, status } : m,
+          ),
+        },
+      };
+    });
+  },
 }));

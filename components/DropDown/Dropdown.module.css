@@ -1,7 +1,7 @@
 .root {
     position: relative;
     display: inline-block;
-    z-index: 30;
+    z-index: 40;
     /* trigger + menu backdrop ke upar rahenge */
 }
 
