@@ -66,17 +66,20 @@ export default function RegisterPage() {
         { withCredentials: true },
       );
 
-      const {id,username} = res.data?.user;
-      sessionStorage.setItem('userid',id);
-      sessionStorage.setItem('username',username);
+      // console.log("Res :",res);
+      // const {id,username} = res.data?.user;
+      // sessionStorage.setItem('userid',id);
+      // sessionStorage.setItem('username',username);
       success(res.data?.message ?? "OTP sent");
       router.push("/verify-otp");
 
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.log(err.response);
         setServerError(err.response?.data?.message ?? err.message);
         return;
       }
+      console.log(err);
       setServerError("Network error. Please try again.");
     } finally {
       setLoading(false);

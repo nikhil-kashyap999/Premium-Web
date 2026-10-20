@@ -7,24 +7,16 @@ import React, { useState } from "react";
 
 export default function page() {
   const router = useRouter();
-  const { success,error } = useNotification();
+  const { success, error } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const onComplete = async (OTP: string) => {
     setLoading(true);
     try {
-      const userId = sessionStorage.getItem('userid');
-      const username = sessionStorage.getItem('username');
-
-      if (!userId && !username) {
-        error("Error while verfiying OTP, please re-register yourself");
-        return;
-      }
-
       const res = await axios.post(
         "/api/auth/verify-otp",
-        { OTP,userId,username },
+        { OTP },
         { withCredentials: true },
       );
       sessionStorage.clear();
