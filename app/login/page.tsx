@@ -44,7 +44,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     setServerError(null);
-    console.log("baseUrl : ",baseUrl);
+    console.log("baseUrl : ", baseUrl);
     try {
       const res = await axios.post(
         "/api/auth/login",
@@ -58,13 +58,13 @@ export default function LoginPage() {
       setAuth(user);
       router.replace("/chat");
     } catch (err) {
-      console.log(err);
       if (axios.isAxiosError(err)) {
         if (!err.response) {
           setServerError("Network error. Please try again.");
           errorNotification("Network error. Please try again.");
           return;
         }
+        console.log(err.response);
         const message = err.response.data?.message;
         setServerError(message ?? "Something went wrong.");
         if (err.response.status >= 500) {
@@ -184,7 +184,12 @@ export default function LoginPage() {
               </Field>
 
               <div className="w-full flex justify-end">
-                  <a className="text-xs text-[#82dc96a6] underline cursor-pointer" href="/forget-password">Forget Password?</a>
+                <a
+                  className="text-xs text-[#82dc96a6] underline cursor-pointer"
+                  href="/forget-password"
+                >
+                  Forget Password?
+                </a>
               </div>
 
               {/* Submit */}
