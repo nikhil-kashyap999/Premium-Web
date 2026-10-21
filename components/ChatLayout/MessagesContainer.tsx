@@ -13,7 +13,7 @@ function MessagesContainer() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [displayMessages.length]);
 
-  if (displayMessages.length === 0 || !displayMessages) return;
+  if (displayMessages.length === 0 || !displayMessages) return(<div className="flex-1"/>);
   return (
     <div className="w-full h-full overflow-x-hidden overflow-y-auto flex-1 lg:px-4">
       {displayMessages.map((message: messageInterface) => (

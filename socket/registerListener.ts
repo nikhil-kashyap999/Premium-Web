@@ -2,7 +2,7 @@ import { SERVER_EVENTS } from "./event";
 import { Socket } from "socket.io-client";
 import { useAuth } from "@/store/AuthStore";
 import { useChatStore } from "@/store/ChatStore";
-import { saveMessage } from "@/lib/db/messageRepo";
+import { saveMessage, updateMessageStatusInDB } from "@/lib/db/messageRepo";
 import { useContacts } from "@/store/ContactsStore";
 import { IncomingMessageType, Status } from "@/Types/BareMessageType";
 import { messageInterface, SendType } from "@/Types/ContactsType";
@@ -22,6 +22,7 @@ export function registerSocketListners(socket: Socket) {
   };
   const onNewMessage = async (data: IncomingMessageType) => {
     const id = data.messageid ?? generateId();
+    const messageStatus = data.senderid === useChatStore.getState().selectedContact?._id ? "read" : "delivered";
     const partnerid =
       data.senderid === useAuth.getState().user?._id
         ? data.receiverid
@@ -31,7 +32,7 @@ export function registerSocketListners(socket: Socket) {
       id,
       partnerid,
       intent: SendType.RECEIVED,
-      status: "delivered",
+      status: messageStatus,
     };
     if (data.senderid !== useChatStore.getState().selectedContact?._id) {
       const contact = useContacts.getState().getContact(data.senderid);
@@ -51,7 +52,7 @@ export function registerSocketListners(socket: Socket) {
     sendMessageStatus({
       messageid: id,
       receiverid: data.senderid,
-      status: "delivered",
+      status: messageStatus,
     });
   };
   const onInviteNotification = (data: {
@@ -69,10 +70,12 @@ export function registerSocketListners(socket: Socket) {
   const onMessageAck = async (payload: {
     messageid: string;
     receiverid: string;
+    status: Status
   }) => {
     useChatStore
       .getState()
       .updateMessageStatus(payload.messageid, payload.receiverid, "sent");
+    updateMessageStatusInDB(payload.messageid, "read");
   };
   const onMessageStatus = async (payload: {
     messageid: string;
@@ -83,6 +86,7 @@ export function registerSocketListners(socket: Socket) {
     useChatStore
       .getState()
       .updateMessageStatus(payload.messageid, payload.senderid, payload.status);
+    updateMessageStatusInDB(payload.messageid, payload.status);
   };
 
   socket.on("connect", onConnect);

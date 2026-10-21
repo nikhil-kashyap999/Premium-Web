@@ -41,7 +41,6 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
       style={{ backgroundColor: color.backgroundColor }}
       className=" w-[95vw] h-[90vh] lg:w-screen lg:h-screen rounded-2xl lg:grid lg:grid-cols-[400px_1fr]"
     >
-
       <NotificationCard />
       {/* Sidebar */}
       <aside className="hidden lg:flex flex-col h-full min-h-0 px-3 border-r border-neutral-500/50">

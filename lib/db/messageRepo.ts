@@ -1,5 +1,6 @@
-import { messageInterface } from "@/Types/ContactsType";
+import { Status } from "@/Types/BareMessageType";
 import { getDB } from "./chatDB";
+import { messageInterface } from "@/Types/ContactsType";
 
 export async function saveMessage(msg: messageInterface) {
   const db = await getDB();
@@ -28,4 +29,14 @@ export async function saveMessagesBulk(messages: messageInterface[]) {
 export async function deleteMessage(id: string) {
   const db = await getDB();
   await db.delete("messages", id);
+}
+
+export async function updateMessageStatusInDB(msgid: string, status: Status) {
+  const db = await getDB();
+  const tx = db.transaction("messages", "readwrite");
+  const existing = await tx.store.get(msgid);
+  if (existing) {
+    await tx.store.put({ ...existing, status: status });
+  }
+  await tx.done;
 }

@@ -112,7 +112,7 @@ function ChatBubble({ id, sended, message, status }: ChatBubbleProps) {
   const MessageStatus = ({ status }: { status?: Status }) => {
     switch (status) {
       case "sending":
-        return <Clock size={14} className="text-gray-400" />;
+        return <Clock size={10} className="text-gray-400" />;
       case "sent":
         return <Check size={14} className="text-gray-400" />;
       case "delivered":
