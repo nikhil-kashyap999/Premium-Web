@@ -10,6 +10,7 @@ import { useAuth } from "@/store/AuthStore";
 import { useNotification } from "@/context/NotificationContext";
 import axios from "axios";
 import { baseUrl } from "@/constants/App-constants";
+import axiosInstance from "@/lib/axiosInterceptor/axios";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type LoginFormData = {
@@ -44,16 +45,11 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     setServerError(null);
-    console.log("baseUrl : ", baseUrl);
     try {
-      const res = await axios.post(
-        "/api/auth/login",
-        {
-          username: data.username,
-          password: data.password,
-        },
-        { withCredentials: true },
-      );
+      const res = await axiosInstance.post("/api/auth/login", {
+        username: data.username,
+        password: data.password,
+      });
       const { user } = res.data ?? {};
       setAuth(user);
       router.replace("/chat");
@@ -64,7 +60,6 @@ export default function LoginPage() {
           errorNotification("Network error. Please try again.");
           return;
         }
-        console.log(err.response);
         const message = err.response.data?.message;
         setServerError(message ?? "Something went wrong.");
         if (err.response.status >= 500) {
