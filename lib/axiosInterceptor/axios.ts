@@ -2,7 +2,7 @@ import { baseUrl } from "@/constants/App-constants";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: baseUrl,
+  baseURL: "",
   withCredentials: true,
 });
 
