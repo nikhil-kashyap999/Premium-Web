@@ -58,6 +58,7 @@ export default function LoginPage() {
       setAuth(user);
       router.replace("/chat");
     } catch (err) {
+      console.log(err);
       if (axios.isAxiosError(err)) {
         if (!err.response) {
           setServerError("Network error. Please try again.");
