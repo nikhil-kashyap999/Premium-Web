@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import color from "@/lib/color";
 
@@ -26,6 +26,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
   const [contacts, setContacts] = useState<contactType[]>(
     returnedContacts || [],
   );
+
   useEffect(() => {
     setContacts(returnedContacts || []);
   }, [returnedContacts]);
@@ -101,7 +102,6 @@ function SectionTitle({ title }: SectionTitleProps) {
     </p>
   );
 }
-
 function RefreshButton({
   fetchUsers,
   fetchingUsers,
@@ -125,4 +125,5 @@ function Loading() {
     </>
   );
 }
+
 export default ChatLayout;

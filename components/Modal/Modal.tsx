@@ -47,6 +47,7 @@ function Modal({ isOpen, toggleModal, label, children }: ModalProps) {
     <div
       ref={backdropRef}
       onClick={handleBackdropClick}
+      aria-hidden="true"
       className={`absolute inset-0 z-50 flex items-center justify-center px-3 lg:px-0
         transition-opacity duration-250
         ${animate ? "opacity-100" : "opacity-0"}`}

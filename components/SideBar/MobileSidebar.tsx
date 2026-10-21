@@ -3,12 +3,9 @@ import {
   UsersRound,
   LogOut,
   X,
-  Send,
   UserCheck,
   UserSearch,
 } from "lucide-react";
-import useLogout from "@/hooks/useLogout";
-import UserCell from "../UserCards/UserCell";
 import SearchBar from "../SearchBar/SearchBar";
 import { memo, useEffect, useState } from "react";
 import { contactType } from "../../Types/ContactsType";
@@ -22,6 +19,7 @@ import { useContacts } from "@/store/ContactsStore";
 import logo from "@/assets/images/logo.png";
 import Image from "next/image";
 import { APP_NAME } from "@/constants/App-constants";
+import ContactsSection from "./ContactsSection";
 
 interface PropType {
   isOpen: boolean;
@@ -101,16 +99,10 @@ function MobileSidebar({ isOpen, setIsOpen }: PropType) {
         </p>
 
         {/* User list */}
-        <div className="flex-1 overflow-y-auto px-2 pb-2 scrollbar-thin scrollbar-thumb-white/10 flex flex-col gap-y-2">
-          {userContacts.length > 0 &&
-            userContacts.map((user: contactType) => (
-              <UserCell
-                user={user}
-                key={user._id}
-                onClick={() => onContactClick(user)}
-              />
-            ))}
-        </div>
+        <ContactsSection
+          userContacts={userContacts}
+          onContactClick={onContactClick}
+        />
 
         {/* Footer nav */}
         <div className="shrink-0 px-3 pb-5 pt-2 border-t border-white/6">
