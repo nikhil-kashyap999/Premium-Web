@@ -9,6 +9,7 @@ import PasswordField from "@/components/Input/PasswordField";
 import { useAuth } from "@/store/AuthStore";
 import { useNotification } from "@/context/NotificationContext";
 import axios from "axios";
+import { baseUrl } from "@/constants/App-constants";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type LoginFormData = {
@@ -43,6 +44,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
     setServerError(null);
+    console.log("baseUrl : ",baseUrl);
     try {
       const res = await axios.post(
         "/api/auth/login",
