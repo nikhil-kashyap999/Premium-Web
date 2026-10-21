@@ -13,6 +13,7 @@ export interface messageInterface {
   message: string;
   intent: SendType;
   status: Status;
+  createdAt: string | number;
 }
 
 export type contactType = {

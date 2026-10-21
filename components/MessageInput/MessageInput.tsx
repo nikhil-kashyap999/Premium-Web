@@ -29,8 +29,14 @@ function MessageInput() {
       intent: SendType.SENT,
       message: message,
       status: "sending",
+      createdAt: Date.now(),
     };
-    sendMessage({ receiverid: selectedContact._id, message, messageid: id });
+    sendMessage({
+      receiverid: selectedContact._id,
+      message,
+      messageid: id,
+      createdAt: newMsg.createdAt,
+    });
     pushMessage(newMsg, currentUser?._id);
     await saveMessage(newMsg);
     setMessage("");

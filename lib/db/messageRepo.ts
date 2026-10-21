@@ -7,16 +7,26 @@ export async function saveMessage(msg: messageInterface) {
   await db.put("messages", msg);
 }
 
+// export async function getMessagesForContact(
+//   partnerid: string,
+// ): Promise<messageInterface[]> {
+//   const db = await getDB();
+//   const messages = await db.getAllFromIndex(
+//     "messages",
+//     "by-partner",
+//     partnerid,
+//   );
+//   return messages;
+// }
+
 export async function getMessagesForContact(
   partnerid: string,
 ): Promise<messageInterface[]> {
   const db = await getDB();
-  const messages = await db.getAllFromIndex(
-    "messages",
-    "by-partner",
-    partnerid,
+  const messages = await db.getAllFromIndex("messages", "by-partner", partnerid);
+  return messages.sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
-  return messages;
 }
 
 export async function saveMessagesBulk(messages: messageInterface[]) {
