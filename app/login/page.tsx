@@ -50,11 +50,13 @@ export default function LoginPage() {
         username: data.username,
         password: data.password,
       });
+      console.log(res);
       const { user } = res.data ?? {};
       setAuth(user);
       router.replace("/chat");
     } catch (err) {
       if (axios.isAxiosError(err)) {
+        console.log(err.response);
         if (!err.response) {
           setServerError("Network error. Please try again.");
           errorNotification("Network error. Please try again.");
