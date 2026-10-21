@@ -11,7 +11,7 @@ import UserCellWithAction from "../UserCards/UserCellWithAction";
 import { useNotification } from "@/context/NotificationContext";
 
 function InviteModal() {
-  const { user: authUser } = useAuth();
+  const authUser = useAuth(s=>s.user);
   const [error, setError] = useState<string>("");
   const { toggleModal, isOpen } = useInviteModal();
   const { success, error: errNotification } = useNotification();
@@ -19,7 +19,9 @@ function InviteModal() {
 
   const apiCall = async (username: string): Promise<void> => {
     try {
-      const response = await axiosInstance.get(`/api/user/search?q=${username}`);
+      const response = await axiosInstance.get(
+        `/api/user/search?q=${username}`,
+      );
       setUserList(response.data.res ?? []);
       setError("");
     } catch (error) {
@@ -33,7 +35,9 @@ function InviteModal() {
   };
   const sendInvite = async (receiverId: string) => {
     try {
-      const res = await axiosInstance.post("/api/user/invite-send", { receiverId });
+      const res = await axiosInstance.post("/api/user/invite-send", {
+        receiverId,
+      });
       const { message } = res.data ?? "Invite sent";
       success(message);
     } catch (err) {
@@ -44,11 +48,6 @@ function InviteModal() {
       }
     }
   };
-
-  const contactIds = useMemo(
-    () => new Set(authUser?.contacts?.map((c: any) => c)),
-    [authUser?.contacts],
-  );
 
   useEffect(() => {
     if (!isOpen) {
@@ -72,7 +71,7 @@ function InviteModal() {
         {userList.length > 0 &&
           userList.map((user: any) => (
             <UserCellWithAction user={user} key={user._id}>
-              {authUser?._id !== user._id && !contactIds.has(user._id) && (
+              {authUser?._id !== user._id && (
                 <ActionButton
                   label="invite"
                   action={() => sendInvite(user._id)}
