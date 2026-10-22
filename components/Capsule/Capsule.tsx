@@ -19,8 +19,8 @@ function Capsule({ setIsOpen }: any) {
   const { success: s, error: e } = useNotification();
 
   return (
-    <div className="w-full flex items-center px-3 bg-black/40 mb-1 lg:rounded-none rounded-3xl">
-      <div className="">
+    <div className="w-full flex items-center px-2 bg-black/40 mb-1 lg:rounded-none rounded-2xl">
+      <div>
         <button
           type="button"
           onClick={clearContact}
@@ -39,7 +39,10 @@ function Capsule({ setIsOpen }: any) {
             <Menu className="w-5 h-5 text-white" />
           </button>
         </div>
-        <div className="overflow-hidden bg-black/50 lg:bg-transparent py-1 rounded-2xl ml-2 min-w-24 flex-col justify-items-center px-3">
+        <div
+          className="overflow-hidden bg-black/50 lg:bg-transparent py-1 rounded-xl min-w-0 max-w-56
+         flex flex-col items-stretch px-3 flex-1 mx-2 lg:max-w-max"
+        >
           <AnimatePresence mode="wait">
             <motion.h1
               key={contact?.username ?? "username-placeholder"}
@@ -47,9 +50,9 @@ function Capsule({ setIsOpen }: any) {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -16, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="text-sm lg:text-lg font-semibold lg:text-left text-center w-full"
+              className="lg:text-lg text-xs font-semibold lg:text-left text-center w-full truncate"
             >
-              { contact?.username ?? "Username"}
+              {contact?.username ?? "Username"}
             </motion.h1>
           </AnimatePresence>
 
@@ -60,7 +63,7 @@ function Capsule({ setIsOpen }: any) {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -12, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className={`text-xs lg:text-left text-center w-full  ${
+              className={`text-xs lg:text-left text-center w-full ${
                 contact?.isActive ? "text-blue-400" : "text-neutral-500"
               }`}
             >

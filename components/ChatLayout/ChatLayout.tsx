@@ -79,7 +79,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
 
       {/* Chat Area */}
       {contact ? (
-        <main className="lg:h-screen h-[90vh] grid grid-rows-[10%_80%_10%] lg:grid-rows-[10%_75%_15%]">
+        <main className="lg:h-screen h-[90vh] grid grid-rows-[10%_80%_10%] lg:grid-rows-[10%_75%_15%] lg:py-0 pb-2 pt-3">
           <Capsule setIsOpen={setIsOpen} />
           <MessagesContainer />
           <MessageInput />

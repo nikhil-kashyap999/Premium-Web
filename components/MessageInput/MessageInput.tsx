@@ -54,7 +54,7 @@ function MessageInput() {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Write a message..."
-                className="flex-1 text-white placeholder:text-neutral-400 focus:outline-none text-sm h-full bg-transparent"
+                className="flex-1 text-white placeholder:text-neutral-400 focus:outline-none text-sm h-full bg-transparent lg:px-0 px-2"
               />
             </div>
             <button
@@ -69,7 +69,7 @@ function MessageInput() {
         </div>
         <div>
           <h1 className="text-center text-neutral-400 text-xs mt-1 font-light">
-            SendMe: A Messging Platform
+            PREMIUM: A Messging Platform
           </h1>
         </div>
       </div>
