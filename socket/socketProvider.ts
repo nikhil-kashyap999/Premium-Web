@@ -17,6 +17,7 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         const { data } = await axiosInstance.get('/api/auth/socket-token');
         if (cancelled) return;
 
+        console.log("data : ", data);
         socket.auth = { token: data.token };
         cleanup = registerSocketListners(socket);
         socket.connect();
