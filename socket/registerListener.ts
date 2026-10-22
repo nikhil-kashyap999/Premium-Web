@@ -8,6 +8,7 @@ import { IncomingMessageType, Status } from "@/Types/BareMessageType";
 import { messageInterface, SendType } from "@/Types/ContactsType";
 import { useNotificationStore } from "@/store/NotificationStore";
 import { sendMessageStatus } from "./emitters";
+import axiosInstance from "@/lib/axiosInterceptor/axios";
 
 export function registerSocketListners(socket: Socket) {
   const onConnect = () => {
@@ -88,6 +89,10 @@ export function registerSocketListners(socket: Socket) {
       .updateMessageStatus(payload.messageid, payload.senderid, payload.status);
     updateMessageStatusInDB(payload.messageid, payload.status);
   };
+  const onReconnectAttempt = async () => {
+    const { data } = await axiosInstance.get("/api/auth/socket-token");
+    socket.auth = { token: data.token };
+  }
 
   socket.on("connect", onConnect);
   socket.on("disconnect", onDisconnect);
@@ -96,6 +101,7 @@ export function registerSocketListners(socket: Socket) {
   socket.on(SERVER_EVENTS.INVITE_NOTIFICATION, onInviteNotification);
   socket.on(SERVER_EVENTS.MESSAGE_ACK, onMessageAck);
   socket.on(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
+  socket.io.on("reconnect_attempt", onReconnectAttempt);
 
   socket.on("pong", () => console.log("pong event"));
   socket.on("connect_error", async (e) => {
@@ -110,6 +116,7 @@ export function registerSocketListners(socket: Socket) {
     socket.off(SERVER_EVENTS.INVITE_NOTIFICATION, onInviteNotification);
     socket.off(SERVER_EVENTS.MESSAGE_ACK, onMessageAck);
     socket.off(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
+    socket.io.off("reconnect_attempt", onReconnectAttempt);
 
     socket.off("pong", () => console.log("pong event"));
     socket.off("connect_error", async (err) => {
