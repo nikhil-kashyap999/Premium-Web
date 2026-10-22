@@ -7,4 +7,5 @@ console.log("SOCKET_URL : ", SOCKET_URL);
 export const socket: Socket = io(SOCKET_URL, {
   withCredentials: true,
   autoConnect: false,
+  transports: ["websocket"],
 });
