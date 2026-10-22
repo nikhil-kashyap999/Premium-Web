@@ -12,6 +12,7 @@ import axiosInstance from "@/lib/axiosInterceptor/axios";
 
 export function registerSocketListners(socket: Socket) {
   const onConnect = () => {
+    console.log("connected");
     socket.connect();
     socket.emit("ping", "Hello from web client");
   };
