@@ -3,22 +3,35 @@ import React, { useEffect } from "react";
 import { socket } from "./socket";
 import { registerSocketListners } from "./registerListener";
 import axiosInstance from "@/lib/axiosInterceptor/axios";
+import axios from "axios";
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
   const isAuththenticated = useAuth((s) => s.isAuthenticated);
   useEffect(() => {
-    let cleanup: () => void;
-    async () => {
-      if (!isAuththenticated) return;
-      const data = await axiosInstance.get('/api/auth/socket-token');
-      socket.auth = { token:data.data.token };
-      cleanup = registerSocketListners(socket);
-      socket.connect();
-    }
+    if (!isAuththenticated) return;
+    let cancelled: boolean = false;
+    let cleanup: (() => void) | undefined;
+
+    (async () => {
+      try {
+        const { data } = await axiosInstance.get('/api/auth/socket-token');
+        if (cancelled) return;
+
+        socket.auth = { token: data.token };
+        cleanup = registerSocketListners(socket);
+        socket.connect();
+
+      } catch (e) {
+        if (axios.isAxiosError(e)) {
+          console.log("Socket token fetch failed : ", e.response?.data);
+        }
+      }
+    })();
 
 
     return () => {
-      cleanup();
+      cancelled = true;
+      cleanup?.();
       socket.disconnect();
     };
   }, [isAuththenticated]);
