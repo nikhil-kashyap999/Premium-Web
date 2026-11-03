@@ -83,7 +83,7 @@ export const useChatStore = create<chatStoreInterface>((set, get) => ({
     get().messagesByContactId[contactId] ?? [],
 
   getLastMessageForContact: (contactid: string) => {
-    if (!contactid) return;
+    if (!contactid) return null;
     if (get().messagesByContactId[contactid]) {
       const res = get().messagesByContactId[contactid].slice(-1)[0];
       return res;

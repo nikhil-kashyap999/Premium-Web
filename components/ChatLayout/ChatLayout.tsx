@@ -26,6 +26,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
   const [contacts, setContacts] = useState<contactType[]>(
     returnedContacts || [],
   );
+  const hasContacts = (contacts?.length ?? 0) > 0;
 
   useEffect(() => {
     setContacts(returnedContacts || []);
@@ -36,8 +37,6 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
       selectContact(contactObj);
     }
   };
-
-  
 
   return (
     <div
@@ -66,7 +65,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
             <Loading />
           ) : (
             <div className="flex-1 min-h-0 mt-2 px-1 flex flex-col gap-2 overflow-y-auto pr-2">
-              {contacts.length > 0 &&
+              {hasContacts &&
                 contacts.map((user: contactType) => (
                   <UserCell
                     key={user?._id}
