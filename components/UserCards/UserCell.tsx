@@ -4,8 +4,8 @@ import { useChatStore } from "@/store/ChatStore";
 import Dropdown from "../DropDown/DropDown";
 
 function UserCell({ user, onClick }: { user: contactType; onClick?: any }) {
-  const { getLastMessageForContact } = useChatStore();
-  const lastMessage = getLastMessageForContact(user._id);
+  const  getLastMessageForContact  = useChatStore(s=>s.getLastMessageForContact);
+  const lastMessage = getLastMessageForContact(user._id) ?? null;
 
   return (
     <div className="w-full h-16 lg:bg-black/10 bg-neutral-900 rounded-xl px-2 flex items-center hover:bg-green-950 cursor-pointer transition-colors duration-200">
