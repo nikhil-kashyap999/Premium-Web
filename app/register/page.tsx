@@ -75,11 +75,9 @@ export default function RegisterPage() {
 
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.log(err.response);
         setServerError(err.response?.data?.message ?? err.message);
         return;
       }
-      console.log(err);
       setServerError("Network error. Please try again.");
     } finally {
       setLoading(false);

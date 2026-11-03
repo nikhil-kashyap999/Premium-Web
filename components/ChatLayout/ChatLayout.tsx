@@ -37,6 +37,8 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
     }
   };
 
+  
+
   return (
     <div
       style={{ backgroundColor: color.backgroundColor }}
