@@ -12,12 +12,11 @@ import axiosInstance from "@/lib/axiosInterceptor/axios";
 
 export function registerSocketListners(socket: Socket) {
   const onConnect = () => {
-    console.log("connected");
     socket.connect();
     socket.emit("ping", "Hello from web client");
   };
   const onDisconnect = (reason: string) => {
-    console.log("❌ Socket disconnected:", reason);
+    // console.log("❌ Socket disconnected:", reason);
   };
   const onPresence = (data: any) => {
     useContacts.getState().updateContactStatus(data);

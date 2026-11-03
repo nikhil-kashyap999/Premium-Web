@@ -16,15 +16,13 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
       try {
         const { data } = await axiosInstance.get('/api/auth/socket-token');
         if (cancelled) return;
-
-        console.log("data : ", data);
         socket.auth = { token: data.token };
         cleanup = registerSocketListners(socket);
         socket.connect();
 
       } catch (e) {
         if (axios.isAxiosError(e)) {
-          console.log("Socket token fetch failed : ", e.response?.data);
+          // console.log("Socket token fetch failed : ", e.response?.data);
         }
       }
     })();

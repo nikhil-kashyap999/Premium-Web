@@ -4,7 +4,6 @@ import { useChatStore } from "@/store/ChatStore";
 import Dropdown from "../DropDown/DropDown";
 
 function UserCell({ user, onClick }: { user: contactType; onClick?: any }) {
-  console.log("User : ",user);
   const  getLastMessageForContact  = useChatStore(s=>s.getLastMessageForContact);
   const lastMessage = user?getLastMessageForContact(user._id) : null;
 

@@ -38,8 +38,6 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
     }
   };
 
-  console.log("Contacts : ", contacts);
-
   return (
     <div
       style={{ backgroundColor: color.backgroundColor }}
