@@ -38,7 +38,7 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
     }
   };
 
-  console.log("Contacts : ",contacts);
+  console.log("Contacts : ", contacts);
 
   return (
     <div
@@ -68,13 +68,16 @@ function ChatLayout({ setIsOpen }: ChatContainerProps) {
           ) : (
             <div className="flex-1 min-h-0 mt-2 px-1 flex flex-col gap-2 overflow-y-auto pr-2">
               {hasContacts &&
-                contacts.map((user: contactType) => (
-                  <UserCell
-                    key={user?._id}
-                    user={user}
-                    onClick={() => onContactClick(user)}
-                  />
-                ))}
+                contacts.map(
+                  (user: contactType) =>
+                    user && (
+                      <UserCell
+                        key={user?._id}
+                        user={user}
+                        onClick={() => onContactClick(user)}
+                      />
+                    ),
+                )}
             </div>
           )}
         </div>
