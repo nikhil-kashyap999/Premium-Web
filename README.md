@@ -1,4 +1,4 @@
-# Project Name
+# Premium
 
 A real-time, web-based one-to-one chat application with email OTP verification, an invite/request system, and live message status.
 
@@ -35,9 +35,9 @@ https://premium-web-phi.vercel.app/
 
 ## Screenshots
 
-| Login | Register + OTP | Main Chat |
+| Login | Register + OTP | OTP | Main Chat |
 | ----- | -------------- | --------- |
-| ![login](./docs/login.png) | ![otp](./docs/otp.png) | ![chat](./docs/chat.png) |
+| ![login](./docs/login.png)|![register](./docs/register.png) | ![otp](./docs/otp.png) | ![chat](./docs/chat.png) |
 
 ## Getting Started
 
@@ -88,7 +88,7 @@ The app runs on `http://localhost:3000` (frontend) and `http://localhost:3001` (
 | `JWT_WS_SECRET` | Secret used to sign auth token for web socket connection  |
 | `BREVO_API_KEY` | Brevo email service API key |
 | `BREVO_SENDER_NAME` | Email Sender Name |
-| `EMAIL_FROM` | Email used for sending mails |
+| `EMAIL_FROM` | Email for sending mails |
 | `CLIENT_URL` | Frontend URL (for CORS) |
 | `NODE_ENV` | Specify current Node Environment |
 
@@ -114,11 +114,13 @@ Next.js client  <--REST-->  NestJS API  <-->  MongoDB
 
 ```
 .
-├── web/        # Next.js frontend
+├── client/     # Next.js frontend
 ├── server/     # NestJS backend
-└── docs/       # Screenshots / demo
-```
 
+```
+## Related Repositories
+- Backend (NestJS): Private
+- Mobile (React Native / Expo):https://github.com/nikhil-kashyap999/PremiumExpo
 ## Challenges & Learnings
 
 - Keeping message status in sync between both users in real time
