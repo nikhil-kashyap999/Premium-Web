@@ -13,11 +13,12 @@ import { useNotification } from "@/context/NotificationContext";
 function Capsule({ setIsOpen }: any) {
   const onLogout = useAuth((s) => s.logout);
   const showProfileModal = useProfileModal().open;
-  const contactid = useChatStore((s) => s.selectedContact);
+  const selected = useChatStore((s) => s.selectedContact);
   const clearContact = useChatStore((s) => s.removeSelectedContact);
-  const contact = useContacts((s) => contactid && s.getContact(contactid._id));
+  const contact = useContacts((s) =>
+    selected ? s.contacts.find((c) => c?._id === selected._id) : undefined,
+  );
   const { success: s, error: e } = useNotification();
-
   return (
     <div className="w-full flex items-center px-2 bg-black/40 mb-1 lg:rounded-none rounded-2xl">
       <div>
@@ -76,7 +77,7 @@ function Capsule({ setIsOpen }: any) {
             { label: "Profile", onSelect: showProfileModal },
             {
               label: "Delete Chat",
-              onSelect: async () => contactid && deleteMessage(contactid._id),
+              onSelect: async () => selected && deleteMessage(selected?._id),
             },
             {
               label: "Logout",

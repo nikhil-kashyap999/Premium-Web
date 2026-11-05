@@ -14,8 +14,10 @@ export const useContacts = create<selectedContactType>((set, get) => ({
   contacts: [],
   clearContacts: () => set({ contacts: [] }),
   setContacts: (contactsList: contactType[]) => set({ contacts: contactsList }),
-  getContact: (contactId: string) =>
-    get().contacts.find((contact) => contact._id === contactId),
+  getContact: (contactId: string) => {
+    if (!contactId) return undefined;
+    return get().contacts.find((contact) => contact?._id === contactId);
+  },
   updateContactStatus: (contact) =>
     set((state) => ({
       contacts: state.contacts.map((c) =>
