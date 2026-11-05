@@ -35,9 +35,9 @@ https://premium-web-phi.vercel.app/
 
 ## Screenshots
 
-| Login | Register + OTP | OTP | Main Chat |
-| ----- | -------------- | --------- |
-| ![login](./docs/login.png)|![register](./docs/register.png) | ![otp](./docs/otp.png) | ![chat](./docs/chat.png) |
+| Login | Register | OTP  | Main Chat |
+| ----- | -------- | ---- | --------- |
+| ![login](./docs/login.png) | ![register](./docs/register.png) | ![otp](./docs/otp.png) | ![chat](./docs/chat.png) |
 
 ## Getting Started
 
