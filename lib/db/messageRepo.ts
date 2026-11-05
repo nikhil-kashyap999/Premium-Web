@@ -38,3 +38,7 @@ export async function updateMessageStatusInDB(msgid: string, status: Status) {
   }
   await tx.done;
 }
+export async function cleanDB() {
+  const db = await getDB();
+  await db.clear("messages");
+}

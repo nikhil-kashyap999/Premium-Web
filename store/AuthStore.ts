@@ -1,6 +1,9 @@
 import axios from "axios";
 import { create } from "zustand";
 import { User } from "@/Types/UserType";
+import { useChatStore } from "./ChatStore";
+import { useContacts } from "./ContactsStore";
+import { cleanDB } from "@/lib/db/messageRepo";
 import axiosInstance from "@/lib/axiosInterceptor/axios";
 
 type userAuthType = {
@@ -16,14 +19,18 @@ export const useAuth = create<userAuthType>((set) => ({
   isAuthenticated: false,
   setAuth: (user) => set({ user, isAuthenticated: true }),
   clearAuth: () => set({ user: null, isAuthenticated: false }),
-  logout: async (success: any, error: any) => {
+  logout: async (onSuccess: any, onError: any) => {
     try {
       await axiosInstance.post("/api/auth/logout");
-      success("Logout Successful");
+      await cleanDB();
+      useChatStore.getState().removeSelectedContact();
+      useContacts.getState().clearContacts();
+      set({ user: null });
+      onSuccess?.("Logged out");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         const { message: errMsg } = err.response?.data ?? "Error in logout";
-        error(errMsg);
+        onError(errMsg);
       }
     } finally {
       set({ user: null, isAuthenticated: false });

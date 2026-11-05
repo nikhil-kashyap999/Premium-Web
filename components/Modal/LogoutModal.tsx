@@ -1,15 +1,24 @@
 import { X } from "lucide-react";
+import { useAuth } from "@/store/AuthStore";
 import { useEffect, useRef, useState } from "react";
 import { useLogoutModal } from "@/context/LogoutModalContext";
-import useLogout from "@/hooks/useLogout";
+import { useNotification } from "@/context/NotificationContext";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LogoutModal() {
-  const  logout  = useLogout();
+  const queryClient = useQueryClient();
+  const logout = useAuth((s) => s.logout);
+  const { success, error } = useNotification();
   const { isOpen: isVisible, toggleModal: toggleLogoutModal } =
     useLogoutModal();
   const [mounted, setMounted] = useState(false);
   const [animate, setAnimate] = useState(false);
   const backdropRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = () => {
+    logout(success, error);
+    queryClient.clear();
+  };
 
   useEffect(() => {
     if (isVisible) {
@@ -84,7 +93,7 @@ export default function LogoutModal() {
             <button
               type="button"
               className="px-4 text-red-500 hover:text-red-600 duration-200 py-2 rounded-lg text-xs cursor-pointer bg-neutral-950 flex-1"
-              onClick={logout}
+              onClick={handleLogout}
             >
               Logout
             </button>
