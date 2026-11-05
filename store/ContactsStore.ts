@@ -13,7 +13,7 @@ type selectedContactType = {
 export const useContacts = create<selectedContactType>((set, get) => ({
   contacts: [],
   clearContacts: () => set({ contacts: [] }),
-  setContacts: (contactsList: contactType[]) => set({ contacts: contactsList }),
+  setContacts: (contactsList: contactType[]) => set({ contacts: contactsList.filter(Boolean) }),
   getContact: (contactId: string) => {
     if (!contactId) return undefined;
     return get().contacts.find((contact) => contact?._id === contactId);
