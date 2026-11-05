@@ -103,7 +103,7 @@ export function registerSocketListners(socket: Socket) {
   socket.on(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
   socket.io.on("reconnect_attempt", onReconnectAttempt);
 
-  socket.on("pong", () => console.log("pong event"));
+  socket.on("pong", () => {});
   socket.on("connect_error", async (e) => {
     console.error(e);
   });
