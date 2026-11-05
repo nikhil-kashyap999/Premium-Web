@@ -119,7 +119,7 @@ Next.js client  <--REST-->  NestJS API  <-->  MongoDB
 
 ```
 ## Related Repositories
-- Backend (NestJS): Private
+- Backend (NestJS): https://github.com/nikhil-kashyap999/Premium-server
 - Mobile (React Native / Expo):https://github.com/nikhil-kashyap999/PremiumExpo
 ## Challenges & Learnings
 
