@@ -25,7 +25,7 @@ function Capsule({ setIsOpen }: any) {
         <button
           type="button"
           onClick={clearContact}
-          className="p-2 rounded-lg bg-black/50 backdrop-blur-md"
+          className="p-2 rounded-lg bg-black/50 backdrop-blur-md cursor-pointer hover:bg-black duration-150"
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
@@ -35,7 +35,7 @@ function Capsule({ setIsOpen }: any) {
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="lg:hidden p-2 rounded-lg bg-black/50 backdrop-blur-md"
+            className="lg:hidden p-2 rounded-lg bg-black/50 backdrop-blur-md "
           >
             <Menu className="w-5 h-5 text-white" />
           </button>
