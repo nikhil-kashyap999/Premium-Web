@@ -1,10 +1,11 @@
 export type IncomingMessageType = {
-  senderid: string;
-  receiverid: string;
-  message: string;
-  messageid: string;
-  createdAt: number | string;
   status: Status
+  message: string;
+  senderid: string;
+  messageid: string;
+  receiverid: string;
+  conversationId?: string;
+  createdAt: number | string;
 };
 export type TransmittingMessageType = Pick<
   IncomingMessageType,

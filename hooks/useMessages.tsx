@@ -13,8 +13,8 @@ const EMPTY_MESSAGES: messageInterface[] = []; // stable reference (infinite-loo
 
 export default function useMessages() {
   const { user: currentUser } = useAuth();
-  const selectedContact = useChatStore((state) => state.selectedContact);
   const { deleteMsg, pushMessage } = useChatStore();
+  const selectedContact = useChatStore((state) => state.selectedContact);
 
   // displayMessages — ab local state nahi, seedha store se derive
   const displayMessages = useChatStore((state) =>

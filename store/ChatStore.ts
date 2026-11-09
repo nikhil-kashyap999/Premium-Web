@@ -92,6 +92,7 @@ export const useChatStore = create<chatStoreInterface>((set, get) => ({
   getAllMessages: () => get().messagesByContactId,
 
   updateMessageStatus: (msgid, contactid, status) => {
+    console.log("Status in local storage : ", status);
     set((s) => {
       const messages = get().messagesByContactId[contactid];
       if (!messages) return s;

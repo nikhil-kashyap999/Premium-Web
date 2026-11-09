@@ -1,5 +1,5 @@
 import useMessages from "@/hooks/useMessages";
-import { SendType } from "@/Types/ContactsType";
+import { IntentType } from "@/Types/ContactsType";
 import { useState, useEffect } from "react";
 import { Check, CheckCheck, Clock } from "lucide-react";
 import { Status } from "@/Types/BareMessageType";
@@ -94,16 +94,15 @@ function OptionDialogue({
 
 type ChatBubbleProps = {
   id: string;
-  sended: SendType; // true = mera message
   message: string;
   status?: Status;
+  sended: IntentType;
 };
 function ChatBubble({ id, sended, message, status }: ChatBubbleProps) {
   const [openDialogue, setOpenDialogue] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const isSent = sended === SendType.SENT;
+  const isSent = sended === "sent";
 
-  // Entrance animation on mount
   useEffect(() => {
     const t = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(t);

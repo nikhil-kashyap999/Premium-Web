@@ -1,5 +1,5 @@
-import { Status } from "@/Types/BareMessageType";
 import { getDB } from "./chatDB";
+import { Status } from "@/Types/BareMessageType";
 import { messageInterface } from "@/Types/ContactsType";
 
 export async function saveMessage(msg: messageInterface) {
@@ -33,6 +33,7 @@ export async function updateMessageStatusInDB(msgid: string, status: Status) {
   const db = await getDB();
   const tx = db.transaction("messages", "readwrite");
   const existing = await tx.store.get(msgid);
+  console.log("status in DB : ", status);
   if (existing) {
     await tx.store.put({ ...existing, status: status });
   }

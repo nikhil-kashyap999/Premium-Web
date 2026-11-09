@@ -4,7 +4,7 @@ import { SendHorizontal } from "lucide-react";
 import { sendMessage } from "@/socket/emitters";
 import { useChatStore } from "@/store/ChatStore";
 import { saveMessage } from "@/lib/db/messageRepo";
-import { messageInterface, SendType } from "@/Types/ContactsType";
+import { messageInterface, IntentType } from "@/Types/ContactsType";
 
 function MessageInput() {
   const selectedContact = useChatStore((state) => state.selectedContact);
@@ -23,19 +23,19 @@ function MessageInput() {
 
     const newMsg: messageInterface = {
       id,
-      senderid: currentUser?._id,
-      receiverid: selectedContact?._id,
-      partnerid: selectedContact?._id,
-      intent: SendType.SENT,
+      intent: "sent",
       message: message,
-      status: "sending",
+      status: "Pending",
       createdAt: Date.now(),
+      senderid: currentUser?._id,
+      partnerid: selectedContact?._id,
+      receiverid: selectedContact?._id,
     };
     sendMessage({
-      receiverid: selectedContact._id,
       message,
       messageid: id,
       createdAt: newMsg.createdAt,
+      receiverid: selectedContact._id,
     });
     pushMessage(newMsg, currentUser?._id);
     await saveMessage(newMsg);

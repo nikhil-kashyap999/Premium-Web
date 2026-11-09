@@ -5,7 +5,7 @@ import { useChatStore } from "@/store/ChatStore";
 import { saveMessage, updateMessageStatusInDB } from "@/lib/db/messageRepo";
 import { useContacts } from "@/store/ContactsStore";
 import { IncomingMessageType, Status } from "@/Types/BareMessageType";
-import { messageInterface, SendType } from "@/Types/ContactsType";
+import { messageInterface, IntentType } from "@/Types/ContactsType";
 import { useNotificationStore } from "@/store/NotificationStore";
 import { sendMessageStatus } from "./emitters";
 import axiosInstance from "@/lib/axiosInterceptor/axios";
@@ -23,7 +23,7 @@ export function registerSocketListners(socket: Socket) {
   };
   const onNewMessage = async (data: IncomingMessageType) => {
     const id = data.messageid ?? generateId();
-    const messageStatus = data.senderid === useChatStore.getState().selectedContact?._id ? "read" : "delivered";
+    const messageStatus = data.senderid === useChatStore.getState().selectedContact?._id ? "Seen" : "Delivered";
     const partnerid =
       data.senderid === useAuth.getState().user?._id
         ? data.receiverid
@@ -32,7 +32,7 @@ export function registerSocketListners(socket: Socket) {
       ...data,
       id,
       partnerid,
-      intent: SendType.RECEIVED,
+      intent: "received",
       status: messageStatus,
     };
     if (data.senderid !== useChatStore.getState().selectedContact?._id) {
@@ -75,8 +75,8 @@ export function registerSocketListners(socket: Socket) {
   }) => {
     useChatStore
       .getState()
-      .updateMessageStatus(payload.messageid, payload.receiverid, "sent");
-    updateMessageStatusInDB(payload.messageid, "read");
+      .updateMessageStatus(payload.messageid, payload.receiverid, payload.status);
+    updateMessageStatusInDB(payload.messageid, payload.status);
   };
   const onMessageStatus = async (payload: {
     messageid: string;
@@ -103,7 +103,7 @@ export function registerSocketListners(socket: Socket) {
   socket.on(SERVER_EVENTS.MESSAGE_STATUS, onMessageStatus);
   socket.io.on("reconnect_attempt", onReconnectAttempt);
 
-  socket.on("pong", () => {});
+  socket.on("pong", () => { });
   socket.on("connect_error", async (e) => {
     console.error(e);
   });

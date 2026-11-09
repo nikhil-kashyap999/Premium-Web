@@ -1,25 +1,27 @@
 import { Status } from "./BareMessageType";
 
-export enum SendType {
-  SENT = "sent",
-  RECEIVED = "received",
-}
+export type IntentType = "sent" | "received";
+
+// export enum IntentType {
+//   SENT = "sent",
+//   RECEIVED = "received",
+// }
 
 export interface messageInterface {
   id: string;
-  senderid?: string;
-  receiverid?: string;
-  partnerid?: string;
-  message: string;
-  intent: SendType;
   status: Status;
+  message: string;
+  senderid?: string;
+  intent: IntentType;
+  partnerid?: string;
+  receiverid?: string;
   createdAt: string | number;
 }
 
 export type contactType = {
   _id: string;
-  username: string;
   email: string;
+  username: string;
   avatarUrl: string;
   isActive: boolean;
   lastMessage?: string;
